@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  lf-front:
+    container_name: lf-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: yarn dev
+    volumes:
+      - ./:/myapp
+    ports:
+      - '3200:3000'
