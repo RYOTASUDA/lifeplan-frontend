@@ -1,0 +1,23 @@
+name: Rails CI
+on: pull_request
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker compose build lf-front
+
+      - name: Run yarn install
+        run: docker compose run --rm lf-front yarn install
+
+      - name: Run prettier
+        run: docker compose run --rm lf-front yarn prettier_check
+
+      - name: Run lint
+        run: docker compose run --rm lf-front yarn lint_check
