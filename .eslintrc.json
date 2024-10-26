@@ -1,3 +1,101 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier",
+    "plugin:import/recommended",
+    "plugin:import/warnings"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  // NOTE: "@typescript-eslint/no-use-before-define" と競合するため、no-use-before-defineはoff
+  "rules": {
+    "camelcase": [2, { "properties": "always" }],
+    "import/extensions": [2, { "extensions": [".ts", ".tsx"] }],
+    "import/prefer-default-export": 0,
+    "import/no-default-export": 2,
+    "import/no-unresolved": 2,
+    "import/order": [2, { "alphabetize": { "order": "asc" } }],
+    "no-console": 2,
+    "no-unused-expressions": [2, { "allowShortCircuit": true }],
+    "react/jsx-filename-extension": [2, { "extensions": [".tsx"] }],
+    "react/jsx-max-depth": [2, { "max": 7 }],
+    "react/jsx-sort-props": 2,
+    "react/prop-types": 2,
+    // tabForm削除時にChapterをexceptionsから削除
+    "react/jsx-props-no-spreading": [2, { "exceptions": ["FormProvider", "Chapter"] }],
+    "react-hooks/exhaustive-deps": 2,
+    "arrow-body-style": [2, "as-needed"],
+    "func-style": [2, "expression"],
+    "no-use-before-define": 0,
+    "@typescript-eslint/no-use-before-define": 2,
+    "@typescript-eslint/ban-ts-comment": 2,
+    "@typescript-eslint/explicit-function-return-type": 2,
+    "@typescript-eslint/no-explicit-any": 2,
+    "@typescript-eslint/typedef": 2,
+    "@typescript-eslint/prefer-readonly-parameter-types": 1,
+    "@typescript-eslint/no-non-null-assertion": 2,
+    "@typescript-eslint/no-unsafe-call": 2,
+    "@typescript-eslint/no-unsafe-member-access": 2,
+    "@typescript-eslint/no-unsafe-return": 2,
+    "@typescript-eslint/consistent-type-assertions": [2, { "assertionStyle": "never" }],
+    "jsx-a11y/label-has-associated-control": [2, { "assert": "both" }],
+    "no-param-reassign": 2,
+    "no-restricted-syntax": [
+      2,
+      {
+        "selector": "TSEnumDeclaration",
+        "message": "Don't declare enums."
+      },
+      {
+        "selector": "TSInterfaceDeclaration",
+        "message": "Prefer types to interfaces."
+      }
+    ],
+    "@next/next/no-img-element": 0,
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "overrides": [
+    // nextのpages以下のコンポーネントの書き方に合わせるため
+    {
+      "files": ["pages/**/*.tsx"],
+      "rules": {
+        "import/no-default-export": 0
+      }
+    },
+    // jsファイルなので型関連を無効化
+    {
+      "files": ["**/*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/no-unsafe-call": 0,
+        "@typescript-eslint/no-unsafe-member-access": 0,
+        "@typescript-eslint/no-unsafe-return": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/typedef": 0
+      }
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
 }
