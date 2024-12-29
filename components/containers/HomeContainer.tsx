@@ -1,12 +1,24 @@
 import { Box, Button, Heading, Text, Progress, Stack, Card, Icon } from '@yamada-ui/react';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { FaRegListAlt, FaMoneyBillAlt, FaCalendarCheck } from 'react-icons/fa';
+import { useAuth } from '../providers/auth';
 
 export const HomeContainer = (): ReactElement => {
+  const { setToken } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token) {
+      setToken(token);
+      localStorage.setItem('auth', token);
+    }
+  }, [setToken]);
+
   const handleGoogleAuth = (e) => {
     e.preventDefault();
-    const form = document.createElement("form");
-    form.method = "POST";
+    const form = document.createElement('form');
+    form.method = 'GET';
     form.action = `${process.env.BACKEND_DOMAIN}/auth/google_oauth2`;
     document.body.appendChild(form);
     form.submit();
@@ -14,7 +26,7 @@ export const HomeContainer = (): ReactElement => {
 
   return (
     <Box>
-    {/* ヘッダー */}
+      {/* ヘッダー */}
       <Box as="header" bg="gray.500" color="white" p={4}>
         <Stack align="center" direction="row" justify="space-between">
           <Heading size="lg">Life Planくん</Heading>
@@ -28,7 +40,9 @@ export const HomeContainer = (): ReactElement => {
             <Button color="white" variant="ghost">
               サポート
             </Button>
-            <Button colorScheme="teal" onClick={handleGoogleAuth}>Googleログイン</Button>
+            <Button colorScheme="teal" onClick={handleGoogleAuth}>
+              Googleログイン
+            </Button>
           </Stack>
         </Stack>
       </Box>
@@ -128,4 +142,4 @@ export const HomeContainer = (): ReactElement => {
       </Box>
     </Box>
   );
-}
+};
