@@ -11,3 +11,9 @@ services:
       - ./:/myapp
     ports:
       - '3200:3000'
+    networks:
+      - lifeplan-network
+
+networks:
+  lifeplan-network:
+    external: true
