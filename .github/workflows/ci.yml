@@ -10,6 +10,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup network
+        run: docker network create lifeplan-network
+
       - name: Build Docker image
         run: docker compose build lf-front
 
