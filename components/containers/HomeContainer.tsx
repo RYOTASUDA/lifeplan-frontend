@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Text, Progress, Stack, Card, Icon } from '@yamada-ui/react';
+import { Box, Button, Heading, Text, Stack, Card, Icon } from '@yamada-ui/react';
 import React, { ReactElement, useContext } from 'react';
 import { FaRegListAlt, FaMoneyBillAlt, FaCalendarCheck } from 'react-icons/fa';
 import { GoogleLoginButton } from 'components/atoms/GoogleLoginButton';
@@ -66,28 +66,6 @@ export const HomeContainer = (): ReactElement => {
               準備中
             </Button>
           </Card>
-        </Stack>
-      </Box>
-      {/* 進捗セクション */}
-      <Box bg="gray.50" py={16} textAlign="center">
-        <Heading size="lg">進捗状況</Heading>
-        <Text color="gray.600" mt={4}>
-          目標達成度を一目で確認しましょう。
-        </Text>
-        <Stack direction="row" justify="center" mt={8}>
-          {/* 進捗バー */}
-          <Box width="300px">
-            <Text color="gray.500">ライフプラン進捗</Text>
-            <Progress colorScheme="teal" size="sm" value={75} />
-          </Box>
-          <Box width="300px">
-            <Text color="gray.500">バケットリスト進捗</Text>
-            <Progress colorScheme="teal" size="sm" value={30} />
-          </Box>
-          <Box width="300px">
-            <Text color="gray.500">ファイナンシャルプラン進捗</Text>
-            <Progress colorScheme="teal" size="sm" value={50} />
-          </Box>
         </Stack>
       </Box>
       <Footer />

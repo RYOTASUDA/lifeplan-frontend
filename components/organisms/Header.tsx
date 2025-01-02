@@ -10,6 +10,7 @@ export const Header = (): ReactElement => {
   const { googleLogout } = useGoogleLogout();
 
   const handleGoogleLogout = (): void => {
+    window.location.href = '/';
     googleLogout();
   };
 

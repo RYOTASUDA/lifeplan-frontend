@@ -3,7 +3,7 @@ import { Category } from 'types/Category';
 
 async function fetcher(url: string, category: Category) {
   return fetch(url, {
-    method: 'POST',
+    method: 'PUT',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -12,11 +12,11 @@ async function fetcher(url: string, category: Category) {
   }).then((res) => res.json());
 }
 
-export const useCreateCategory = () => {
-  const createCategory = async (category: Category) => {
-    await fetcher(`${process.env.BACKEND_DOMAIN}/api/categories`, category);
+export const useUpdateCategory = () => {
+  const updateCategory = async (category: Category) => {
+    await fetcher(`${process.env.BACKEND_DOMAIN}/api/categories/${category.id}`, category);
     mutate(`${process.env.BACKEND_DOMAIN}/api/categories`);
   };
 
-  return { createCategory };
+  return { updateCategory };
 };
