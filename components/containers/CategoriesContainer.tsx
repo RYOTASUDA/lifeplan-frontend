@@ -174,7 +174,7 @@ export const CategoriesContainer = (): ReactElement => {
                     }
                     return (
                       !categories.some((category) => category.name === value) ||
-                      'この名前はすでに使用されています。'
+                      '既に使用されています。'
                     );
                   },
                 })}
