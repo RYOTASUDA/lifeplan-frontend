@@ -32,8 +32,7 @@
     "react/jsx-max-depth": [2, { "max": 7 }],
     "react/jsx-sort-props": 2,
     "react/prop-types": 2,
-    // tabForm削除時にChapterをexceptionsから削除
-    "react/jsx-props-no-spreading": [2, { "exceptions": ["FormProvider", "Chapter"] }],
+    "react/jsx-props-no-spreading": [0, { "exceptions": ["FormProvider", "Chapter"] }],
     "react-hooks/exhaustive-deps": 2,
     "arrow-body-style": [2, "as-needed"],
     "func-style": [2, "expression"],

@@ -6,12 +6,16 @@ type Props = {
 };
 
 async function fetcher(url: string) {
-  return fetch(url, { method: 'GET', credentials: 'include' }).then((res) => res.json());
+  const res = await fetch(url, { method: 'GET', credentials: 'include' });
+
+  if (res.status === 401 && window.location.pathname !== '/') {
+    return (window.location.href = '/');
+  }
+  return res.json();
 }
 
 export const useCurrentUser = (): Props => {
   const { data } = useSWR(`${process.env.BACKEND_DOMAIN}/api/users`, fetcher);
-  const currentUser = data?.user ? data.user : undefined;
 
-  return { currentUser };
+  return { currentUser: data?.user };
 };

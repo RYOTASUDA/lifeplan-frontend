@@ -1,71 +1,25 @@
-import { Box, Button, Heading, Text, Progress, Stack, Card, Icon } from '@yamada-ui/react';
-import React, { ReactElement } from 'react';
+import { Box, Button, Heading, Text, Stack, Card, Icon } from '@yamada-ui/react';
+import React, { ReactElement, useContext } from 'react';
 import { FaRegListAlt, FaMoneyBillAlt, FaCalendarCheck } from 'react-icons/fa';
-import { useCurrentUser } from 'hooks/useCurrentUser';
-import { useGoogleLogout } from 'hooks/useGoogleLogout';
+import { GoogleLoginButton } from 'components/atoms/GoogleLoginButton';
+import { Footer } from 'components/organisms/Footer';
+import { Header } from 'components/organisms/Header';
+import { UserContext } from 'lib/contexts/UserContext';
 
 export const HomeContainer = (): ReactElement => {
-  const { currentUser } = useCurrentUser();
-  const { googleLogout } = useGoogleLogout();
-  const isSignedIn = currentUser !== undefined;
-
-  const handleGoogleLogout = (): void => {
-    googleLogout();
-    window.location.href = '/';
-  };
-
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-  const handleGoogleLogin = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    const form = document.createElement('form');
-    form.method = 'GET';
-    form.action = `${process.env.BACKEND_DOMAIN}/auth/google_oauth2`;
-    document.body.appendChild(form);
-    form.submit();
-  };
+  const currentUser = useContext(UserContext);
 
   return (
     <Box>
-      {/* ヘッダー */}
-      <Box as="header" bg="gray.500" color="white" p={4}>
-        <Stack align="center" direction="row" justify="space-between">
-          <Heading size="lg">Life Planくん</Heading>
-          <Stack direction="row">
-            <Button color="white" variant="ghost">
-              ホーム
-            </Button>
-            <Button color="white" variant="ghost">
-              プランニング
-            </Button>
-            <Button color="white" variant="ghost">
-              サポート
-            </Button>
-            {isSignedIn ? (
-              <Button colorScheme="teal" onClick={handleGoogleLogout}>
-                ログアウト
-              </Button>
-            ) : (
-              <Button colorScheme="teal" onClick={handleGoogleLogin}>
-                Googleログイン
-              </Button>
-            )}
-          </Stack>
-        </Stack>
-      </Box>
-
+      <Header />
       {/* ヒーローセクション */}
       <Box bg="gray.100" py={16} textAlign="center">
         <Heading size="xl">あなたの人生の計画を今すぐ始めよう</Heading>
         <Text color="gray.600" fontSize="lg" mt={4}>
           ライフプラン、バケットリスト、ファイナンシャルプランを一元管理
         </Text>
-        {!isSignedIn && (
-          <Button colorScheme="teal" mt={6} size="lg">
-            無料で始める
-          </Button>
-        )}
+        {!currentUser && <GoogleLoginButton mt={6} size="lg" text="無料で始める" />}
       </Box>
-
       {/* 機能紹介セクション */}
       <Box bg="white" py={20}>
         <Stack direction="row" justify="center">
@@ -78,17 +32,14 @@ export const HomeContainer = (): ReactElement => {
             <Text color="gray.500" mt={2}>
               人生の各ステージに合わせて目標を設定し、進捗を管理できます。例えば、キャリアの目標や旅行の計画などを、シンプルに追跡できます。
             </Text>
-            {isSignedIn ? (
-              <Button colorScheme="teal" mt={4} variant="outline">
+            {currentUser ? (
+              <Button as="a" colorScheme="teal" href="life_plans" mt={4} variant="outline">
                 プランを作成
               </Button>
             ) : (
-              <Button colorScheme="teal" mt={4} onClick={handleGoogleLogin} variant="outline">
-                Googleログインして始める
-              </Button>
+              <GoogleLoginButton mt={0} size={undefined} text="Googleログインして始める" />
             )}
           </Card>
-
           {/* バケットリスト */}
           <Card maxW="300px" p={6} shadow="xl" textAlign="center">
             <Icon as={FaRegListAlt} color="teal.500" h={12} w={12} />
@@ -102,7 +53,6 @@ export const HomeContainer = (): ReactElement => {
               準備中
             </Button>
           </Card>
-
           {/* ファイナンシャルプラン表 */}
           <Card maxW="300px" p={6} shadow="xl" textAlign="center">
             <Icon as={FaMoneyBillAlt} color="teal.500" h={12} w={12} />
@@ -118,42 +68,7 @@ export const HomeContainer = (): ReactElement => {
           </Card>
         </Stack>
       </Box>
-
-      {/* 進捗セクション */}
-      <Box bg="gray.50" py={16} textAlign="center">
-        <Heading size="lg">進捗状況</Heading>
-        <Text color="gray.600" mt={4}>
-          目標達成度を一目で確認しましょう。
-        </Text>
-        <Stack direction="row" justify="center" mt={8} spacing={8}>
-          {/* 進捗バー */}
-          <Box width="300px">
-            <Text color="gray.500">ライフプラン進捗</Text>
-            <Progress colorScheme="teal" size="sm" value={75} />
-          </Box>
-          <Box width="300px">
-            <Text color="gray.500">バケットリスト進捗</Text>
-            <Progress colorScheme="teal" size="sm" value={30} />
-          </Box>
-          <Box width="300px">
-            <Text color="gray.500">ファイナンシャルプラン進捗</Text>
-            <Progress colorScheme="teal" size="sm" value={50} />
-          </Box>
-        </Stack>
-      </Box>
-
-      {/* フッター */}
-      <Box as="footer" bg="gray.500" color="white" p={6} textAlign="center">
-        <Text fontSize="sm">© 2024 LifePlanくん</Text>
-        <Stack direction="row" justify="center" mt={4}>
-          <Button color="white" variant="link">
-            プライバシーポリシー
-          </Button>
-          <Button color="white" variant="link">
-            利用規約
-          </Button>
-        </Stack>
-      </Box>
+      <Footer />
     </Box>
   );
 };
