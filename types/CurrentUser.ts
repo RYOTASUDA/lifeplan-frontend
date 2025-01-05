@@ -1,4 +1,4 @@
 export type CurrentUser = {
-  name: string;
-  email: string;
+  readonly name: string;
+  readonly email: string;
 };

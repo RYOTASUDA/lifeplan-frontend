@@ -19,7 +19,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
       <UIProvider>
         <UserContext.Provider value={user}>
           <Head>
-            <title>Lifeplan</title>
+            <title>LifePlan 管理くん</title>
           </Head>
           <Component {...pageProps} />
         </UserContext.Provider>

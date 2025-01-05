@@ -24,7 +24,7 @@ export const Header = (): ReactElement => {
               <Button as="a" color="white" href="/" variant="ghost">
                 ホーム
               </Button>
-              <Button as="a" color="white" href="/life_plans" variant="ghost">
+              <Button as="a" color="white" href="/plans" variant="ghost">
                 ライフプラン
               </Button>
               <Button as="a" color="white" href="/categories" variant="ghost">
