@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   lf-front:
     container_name: lf-front

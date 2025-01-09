@@ -33,7 +33,7 @@ export const HomeContainer = (): ReactElement => {
               人生の各ステージに合わせて目標を設定し、進捗を管理できます。例えば、キャリアの目標や旅行の計画などを、シンプルに追跡できます。
             </Text>
             {currentUser ? (
-              <Button as="a" colorScheme="teal" href="life_plans" mt={4} variant="outline">
+              <Button as="a" colorScheme="teal" href="plans" mt={4} variant="outline">
                 プランを作成
               </Button>
             ) : (

@@ -17,15 +17,20 @@ import {
   RadioGroup,
   Radio,
   Dialog,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  IconButton,
 } from '@yamada-ui/react';
 import React, { ReactElement, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { RiDeleteBinLine, RiEditBoxLine } from 'react-icons/ri';
 import { Footer } from 'components/organisms/Footer';
 import { Header } from 'components/organisms/Header';
 import { useCategories } from 'hooks/useCategories';
-import { useDeleteCategory } from 'hooks/useCategoriesDelete';
+import { useDeleteCategory } from 'hooks/useCategoryDelete';
+import { useUpdateCategory } from 'hooks/useCategoryUpdate';
 import { useCreateCategory } from 'hooks/useCreateCategory';
-import { useUpdateCategory } from 'hooks/useUpdateCategory';
 import { Category } from 'types/Category';
 
 export const CategoriesContainer = (): ReactElement => {
@@ -95,7 +100,7 @@ export const CategoriesContainer = (): ReactElement => {
   };
 
   const successDeleteCategory = (category: Category): void => {
-    deleteCategory(category);
+    deleteCategory(category.id);
     setIsDialogOpen(false);
   };
 
@@ -107,12 +112,14 @@ export const CategoriesContainer = (): ReactElement => {
           カテゴリー設定
         </Heading>
         <Box padding="4">
-          <Box marginBottom="4" textAlign="right">
-            <Button colorScheme="primary" onClick={(): void => openModal('create')}>
-              作成
-            </Button>
-          </Box>
-
+          <Button
+            colorScheme="primary"
+            mb={4}
+            onClick={(): void => openModal('create')}
+            variant="outline"
+          >
+            追加
+          </Button>
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }}>
             {categories.map((category) => (
               <>
@@ -131,16 +138,18 @@ export const CategoriesContainer = (): ReactElement => {
                     <Text as="b" fontSize="lg">
                       {category.name}
                     </Text>
-                    <Flex gap="2">
-                      <Button
-                        colorScheme="primary"
+                    <Flex gap={4}>
+                      <IconButton
+                        icon={<RiEditBoxLine />}
                         onClick={(): void => openModal('edit', category)}
-                      >
-                        編集
-                      </Button>
-                      <Button colorScheme="danger" onClick={(): void => openDialog(category)}>
-                        削除
-                      </Button>
+                        variant="outline"
+                      />
+                      <IconButton
+                        colorScheme="danger"
+                        icon={<RiDeleteBinLine />}
+                        onClick={(): void => openDialog(category)}
+                        variant="outline"
+                      />
                     </Flex>
                   </Flex>
                 </Card>
@@ -161,6 +170,7 @@ export const CategoriesContainer = (): ReactElement => {
             <FormControl
               errorMessage={errors.name ? errors.name.message : undefined}
               isInvalid={!!errors.name}
+              isRequired
               label="カテゴリー名"
               my={4}
             >
@@ -181,7 +191,7 @@ export const CategoriesContainer = (): ReactElement => {
               />
             </FormControl>
 
-            <FormControl isInvalid={!!errors.color} label="テーマ">
+            <FormControl isInvalid={!!errors.color} isRequired label="テーマ">
               <Controller
                 control={control}
                 defaultValue="#2e2e2e"
@@ -237,7 +247,7 @@ export const CategoriesContainer = (): ReactElement => {
             <Button marginRight="4" onClick={closeModal} variant="outline">
               キャンセル
             </Button>
-            <Button colorScheme="primary" type="submit">
+            <Button colorScheme="primary" type="submit" variant="outline">
               {modalMode === 'create' ? '作成' : '保存'}
             </Button>
           </ModalFooter>
@@ -258,6 +268,12 @@ export const CategoriesContainer = (): ReactElement => {
         withOverlay
       >
         <Text>カテゴリー「{categoryToDelete?.name}」を削除しますか？</Text>
+        <Alert status="warning" variant="subtle">
+          <AlertIcon />
+          <AlertDescription>
+            「{categoryToDelete?.name}」に紐づくライフプランは全て削除されます。
+          </AlertDescription>
+        </Alert>
       </Dialog>
     </>
   );

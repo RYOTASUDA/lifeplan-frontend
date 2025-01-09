@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "20.15.1"
+    "node": "23.5.0"
   },
   "scripts": {
     "dev": "APP_ENV=development next dev",
@@ -15,6 +15,7 @@
     "prettier_fix": "prettier --write './**/*.{ts,tsx,json}'"
   },
   "dependencies": {
+    "@yamada-ui/calendar": "^1.8.12",
     "@yamada-ui/react": "^1.6.2",
     "next": "12",
     "prettier": "2.3.2",
