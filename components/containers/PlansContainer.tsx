@@ -86,7 +86,6 @@ export const PlansContainer = (): ReactElement => {
     setIsModalOpen(true);
   };
   const closeModal = (): void => setIsModalOpen(false);
-
   const onSubmit: SubmitHandler<PlanRequest> = (data) => {
     if (modalMode === 'create') {
       createPlan(data);
@@ -127,7 +126,6 @@ export const PlansContainer = (): ReactElement => {
           </Box>
 
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }}>
-            {/* eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types */}
             {allPlans.map((planGroup) => (
               <>
                 <Flex align="center" my={2}>
