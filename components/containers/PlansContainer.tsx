@@ -198,6 +198,7 @@ export const PlansContainer = (): ReactElement => {
                 placeholder="タイトル"
                 {...register('title', {
                   required: { value: true, message: 'タイトルは必須です。' },
+                  maxLength: { value: 20, message: 'タイトルは20文字以内で入力してください。' },
                 })}
               />
             </FormControl>
@@ -229,8 +230,17 @@ export const PlansContainer = (): ReactElement => {
               />
             </FormControl>
 
-            <FormControl label="詳細" my={4}>
-              <Textarea {...register('detail')} />
+            <FormControl
+              errorMessage={errors.detail ? errors.detail.message : undefined}
+              isInvalid={!!errors.detail}
+              label="詳細"
+              my={4}
+            >
+              <Textarea
+                {...register('detail', {
+                  maxLength: { value: 50, message: '詳細は50文字以内で入力してください。' },
+                })}
+              />
             </FormControl>
 
             <FormControl
