@@ -60,6 +60,7 @@ export const PlansContainer = (): ReactElement => {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
   const [planToDelete, setPlanToDelete] = useState<PlanResponse>(undefined);
 
   const openModal = (mode: 'create' | 'edit', plan: PlanResponse = undefined): void => {
@@ -85,7 +86,7 @@ export const PlansContainer = (): ReactElement => {
     setIsModalOpen(true);
   };
   const closeModal = (): void => setIsModalOpen(false);
-  // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
+
   const onSubmit: SubmitHandler<PlanRequest> = (data) => {
     if (modalMode === 'create') {
       createPlan(data);
@@ -212,13 +213,18 @@ export const PlansContainer = (): ReactElement => {
               <Controller
                 control={control}
                 name="deadline"
-                // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
                 render={({ field }): ReactElement => (
                   <MonthPicker
                     defaultType="year"
                     monthFormat="M月"
                     placeholder="YYYY/MM"
                     {...field}
+                    onChange={(date): void => {
+                      field.onChange(date);
+                      setIsMonthPickerOpen(false);
+                    }}
+                    onClick={(): void => setIsMonthPickerOpen(true)}
+                    open={isMonthPickerOpen}
                   />
                 )}
                 rules={{ required: { value: true, message: '期限は必須です。' } }}
@@ -239,7 +245,6 @@ export const PlansContainer = (): ReactElement => {
               <Controller
                 control={control}
                 name="categoryId"
-                // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
                 render={({ field }): ReactElement => (
                   <RadioGroup {...field}>
                     <Flex gap={2} wrap="wrap">

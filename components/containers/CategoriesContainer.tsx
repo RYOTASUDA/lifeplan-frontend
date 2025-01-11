@@ -196,7 +196,6 @@ export const CategoriesContainer = (): ReactElement => {
                 control={control}
                 defaultValue="#2e2e2e"
                 name="color"
-                // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
                 render={({ field }): ReactElement => (
                   <RadioGroup {...field}>
                     <Flex gap={2} wrap="wrap">
