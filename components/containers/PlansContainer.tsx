@@ -60,6 +60,7 @@ export const PlansContainer = (): ReactElement => {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
   const [planToDelete, setPlanToDelete] = useState<PlanResponse>(undefined);
 
   const openModal = (mode: 'create' | 'edit', plan: PlanResponse = undefined): void => {
@@ -85,7 +86,6 @@ export const PlansContainer = (): ReactElement => {
     setIsModalOpen(true);
   };
   const closeModal = (): void => setIsModalOpen(false);
-  // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
   const onSubmit: SubmitHandler<PlanRequest> = (data) => {
     if (modalMode === 'create') {
       createPlan(data);
@@ -126,7 +126,6 @@ export const PlansContainer = (): ReactElement => {
           </Box>
 
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }}>
-            {/* eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types */}
             {allPlans.map((planGroup) => (
               <>
                 <Flex align="center" my={2}>
@@ -199,6 +198,7 @@ export const PlansContainer = (): ReactElement => {
                 placeholder="タイトル"
                 {...register('title', {
                   required: { value: true, message: 'タイトルは必須です。' },
+                  maxLength: { value: 20, message: 'タイトルは20文字以内で入力してください。' },
                 })}
               />
             </FormControl>
@@ -212,21 +212,35 @@ export const PlansContainer = (): ReactElement => {
               <Controller
                 control={control}
                 name="deadline"
-                // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
                 render={({ field }): ReactElement => (
                   <MonthPicker
                     defaultType="year"
                     monthFormat="M月"
                     placeholder="YYYY/MM"
                     {...field}
+                    onChange={(date): void => {
+                      field.onChange(date);
+                      setIsMonthPickerOpen(false);
+                    }}
+                    onClick={(): void => setIsMonthPickerOpen(true)}
+                    open={isMonthPickerOpen}
                   />
                 )}
                 rules={{ required: { value: true, message: '期限は必須です。' } }}
               />
             </FormControl>
 
-            <FormControl label="詳細" my={4}>
-              <Textarea {...register('detail')} />
+            <FormControl
+              errorMessage={errors.detail ? errors.detail.message : undefined}
+              isInvalid={!!errors.detail}
+              label="詳細"
+              my={4}
+            >
+              <Textarea
+                {...register('detail', {
+                  maxLength: { value: 50, message: '詳細は50文字以内で入力してください。' },
+                })}
+              />
             </FormControl>
 
             <FormControl
@@ -239,7 +253,6 @@ export const PlansContainer = (): ReactElement => {
               <Controller
                 control={control}
                 name="categoryId"
-                // eslint-disable-next-line  @typescript-eslint/prefer-readonly-parameter-types
                 render={({ field }): ReactElement => (
                   <RadioGroup {...field}>
                     <Flex gap={2} wrap="wrap">
