@@ -1,0 +1,17 @@
+FROM node:23.5.0-alpine3.20
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+WORKDIR /myapp
+
+RUN apk add --update --no-cache bash curl
+
+COPY package.json yarn.lock /myapp/
+
+RUN yarn install
+
+COPY / /myapp
+
+RUN yarn build_production
+
+EXPOSE 3000
