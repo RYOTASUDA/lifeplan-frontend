@@ -30,3 +30,54 @@ jobs:
 
       - name: Run lint
         run: docker compose run --rm lf-front yarn lint_check
+
+  Deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    needs: ['Lint']
+    if: github.ref_name == 'main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCLOUD_AUTH }}"
+
+      - name: Setup Google Cloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          credentials: ${{ secrets.GCLOUD_AUTH }}
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Configure docker for artifact registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build
+        env:
+          IMAGE_TAG: ${{ github.run_id }}
+        run: docker build -f DockerfileProduction -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/lifeplan-kanrikun-frontend/${{ env.IMAGE_TAG }} .
+
+      - name: Push
+        env:
+          IMAGE_TAG: ${{ github.run_id }}
+        run: |
+          docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/lifeplan-kanrikun-frontend/${{ env.IMAGE_TAG }}
+
+      - name: Deploy
+        env:
+          IMAGE_TAG: ${{ github.run_id }}
+        run: |
+          gcloud run deploy lifeplan-kanrikun-frontend \
+            --project=${{ secrets.PROJECT_ID }} \
+            --image=us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/lifeplan-kanrikun-frontend/${{ env.IMAGE_TAG }} \
+            --region=us-central1 \
+            --service-account=${{ secrets.SERVICE_ACCOUNT }} \
+            --platform=managed \
+            --allow-unauthenticated
