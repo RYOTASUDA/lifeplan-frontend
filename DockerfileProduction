@@ -15,3 +15,5 @@ COPY / /myapp
 RUN yarn build_production
 
 EXPOSE 3000
+
+CMD ["yarn", "start_production"]

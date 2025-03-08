@@ -18,7 +18,6 @@ import {
   Radio,
   RadioGroup,
   SimpleGrid,
-  Tag,
   Text,
   Textarea,
   VStack,
@@ -57,6 +56,7 @@ export const PlansContainer = (): ReactElement => {
       categoryId: `${categories[0]?.id}`,
     },
   });
+
   const [modalMode, setModalMode] = useState<'create' | 'edit'>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -64,28 +64,30 @@ export const PlansContainer = (): ReactElement => {
   const [planToDelete, setPlanToDelete] = useState<PlanResponse>(undefined);
 
   const openModal = (mode: 'create' | 'edit', plan: PlanResponse = undefined): void => {
-    if (mode === 'edit' && plan) {
-      reset({
-        id: plan.id,
-        title: plan.title,
-        deadline: new Date(plan.deadline),
-        detail: plan.detail,
-        periodType: plan.periodType,
-        categoryId: `${plan.category.id}`,
-      });
-    } else {
-      reset({
-        title: '',
-        deadline: new Date(),
-        detail: '',
-        periodType: 'life',
-        categoryId: `${categories[0]?.id}`,
-      });
-    }
+    reset(
+      mode === 'edit' && plan
+        ? {
+            id: plan.id,
+            title: plan.title,
+            deadline: new Date(plan.deadline),
+            detail: plan.detail,
+            periodType: plan.periodType,
+            categoryId: `${plan.category.id}`,
+          }
+        : {
+            title: '',
+            deadline: new Date(),
+            detail: '',
+            periodType: 'life',
+            categoryId: `${categories[0]?.id}`,
+          }
+    );
     setModalMode(mode);
     setIsModalOpen(true);
   };
+
   const closeModal = (): void => setIsModalOpen(false);
+
   const onSubmit: SubmitHandler<PlanRequest> = (data) => {
     if (modalMode === 'create') {
       createPlan(data);
@@ -94,14 +96,17 @@ export const PlansContainer = (): ReactElement => {
     }
     closeModal();
   };
+
   const openDeleteDialog = (plan: PlanResponse): void => {
     setPlanToDelete(plan);
     setIsDialogOpen(true);
   };
+
   const closeDeleteDialog = (): void => {
     setPlanToDelete(undefined);
     setIsDialogOpen(false);
   };
+
   const successDeletePlan = (plan: PlanResponse): void => {
     deletePlan(plan.id);
     closeDeleteDialog();
@@ -127,14 +132,14 @@ export const PlansContainer = (): ReactElement => {
 
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }}>
             {allPlans.map((planGroup) => (
-              <>
+              <Box key={planGroup.era} width={{ base: '100%', md: '360px' }}>
                 <Flex align="center" my={2}>
                   <Text fontSize="xl" fontWeight="bold" mr="4">
                     {planGroup.era}年代
                   </Text>
                   <Divider flex="1" />
                 </Flex>
-                <Box>
+                <Flex direction={{ base: 'row', lg: 'column' }} gap={4} wrap="wrap">
                   {planGroup.plans.map((plan) => (
                     <Card
                       key={plan.id}
@@ -156,17 +161,18 @@ export const PlansContainer = (): ReactElement => {
                           <Text>{plan.detail}</Text>
                         </Flex>
                         <Flex gap={10}>
-                          <Tag color={plan.category.color}>{plan.category.name}</Tag>
                           <Flex gap={4}>
                             <IconButton
                               icon={<RiEditBoxLine />}
                               onClick={(): void => openModal('edit', plan)}
+                              size={{ base: 'md', lg: 'xs' }}
                               variant="outline"
                             />
                             <IconButton
                               colorScheme="danger"
                               icon={<RiDeleteBinLine />}
                               onClick={(): void => openDeleteDialog(plan)}
+                              size={{ base: 'md', lg: 'xs' }}
                               variant="outline"
                             />
                           </Flex>
@@ -174,14 +180,15 @@ export const PlansContainer = (): ReactElement => {
                       </Flex>
                     </Card>
                   ))}
-                </Box>
-              </>
+                </Flex>
+              </Box>
             ))}
           </SimpleGrid>
         </Box>
         <Footer />
       </Box>
 
+      {/* モーダル */}
       <Modal height="auto" isOpen={isModalOpen} onClose={closeModal} size="4xl">
         <ModalOverlay />
         <ModalHeader>ライフプラン編集</ModalHeader>

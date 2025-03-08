@@ -16,9 +16,9 @@ export const Header = (): ReactElement => {
 
   return (
     <Box as="header" bg="gray.500" color="white" p={4}>
-      <Stack align="center" direction="row" justify="space-between">
+      <Stack align="center" direction={{ base: 'row', lg: 'column' }} justify="space-between">
         <Heading size="lg">LifePlan 管理くん</Heading>
-        <Stack direction="row">
+        <Stack direction={{ base: 'row', lg: 'column' }}>
           {isSignedIn ? (
             <>
               <Button as="a" color="white" href="/" variant="ghost">
