@@ -62,6 +62,13 @@ export const PlansContainer = (): ReactElement => {
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
   const [planToDelete, setPlanToDelete] = useState<PlanResponse>(undefined);
 
+  const formatDate = (date: string): string => {
+    const dateObj = new Date(date);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1; // 月は0から始まるため、1を加算
+    return `${year}/${month}`;
+  };
+
   const openModal = (mode: 'create' | 'edit', plan: PlanResponse = undefined): void => {
     reset(
       mode === 'edit' && plan
@@ -153,7 +160,7 @@ export const PlansContainer = (): ReactElement => {
                     >
                       <Flex align="center" justify="space-between">
                         <Flex gap={10}>
-                          <Text as="b">{plan.deadline}</Text>
+                          <Text as="b">{formatDate(plan.deadline)}</Text>
                           <Text as="b" fontSize="lg">
                             {plan.title}
                           </Text>
