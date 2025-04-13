@@ -17,7 +17,6 @@ import {
   ModalOverlay,
   Radio,
   RadioGroup,
-  SimpleGrid,
   Text,
   Textarea,
   VStack,
@@ -130,7 +129,7 @@ export const PlansContainer = (): ReactElement => {
             </Button>
           </Box>
 
-          <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }}>
+          <Flex direction="column" gap={4} mb={4}>
             {allPlans.map((planGroup) => (
               <Box key={planGroup.era} width={{ base: '100%', md: '360px' }}>
                 <Flex align="center" my={2}>
@@ -183,7 +182,7 @@ export const PlansContainer = (): ReactElement => {
                 </Flex>
               </Box>
             ))}
-          </SimpleGrid>
+          </Flex>
         </Box>
         <Footer />
       </Box>
