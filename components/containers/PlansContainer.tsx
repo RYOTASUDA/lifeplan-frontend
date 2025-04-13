@@ -1,5 +1,7 @@
 import { MonthPicker } from '@yamada-ui/calendar';
 import {
+  Autocomplete,
+  AutocompleteOption,
   Box,
   Button,
   Card,
@@ -35,7 +37,7 @@ import { PlanRequest } from 'types/PlanRequest';
 import { PlanResponse } from 'types/PlanResponse';
 
 export const PlansContainer = (): ReactElement => {
-  const { allPlans } = usePlans();
+  const { allPlans, setSearchParams } = usePlans();
   const { categories } = useCategories();
   const { createPlan } = useCreatePlan();
   const { updatePlan } = useUpdatePlan();
@@ -94,6 +96,12 @@ export const PlansContainer = (): ReactElement => {
 
   const closeModal = (): void => setIsModalOpen(false);
 
+  const handleSearch = (e: string): void => {
+    const categoryId = e === '' ? undefined : e;
+
+    setSearchParams({ categoryId });
+  };
+
   const onSubmit: SubmitHandler<PlanRequest> = (data) => {
     if (modalMode === 'create') {
       createPlan(data);
@@ -135,6 +143,19 @@ export const PlansContainer = (): ReactElement => {
               追加
             </Button>
           </Box>
+
+          <Autocomplete
+            onChange={(e): void => handleSearch(e)}
+            placeholder="カテゴリーで絞り込む"
+            py={4}
+          >
+            <AutocompleteOption value="" />
+            {categories.map((category) => (
+              <AutocompleteOption key={category.id} value={`${category.id}`}>
+                {category.name}
+              </AutocompleteOption>
+            ))}
+          </Autocomplete>
 
           <Flex direction="column" gap={4} mb={4}>
             {allPlans.map((planGroup) => (
