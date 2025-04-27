@@ -4,5 +4,5 @@ export type PlanRequest = {
   readonly deadline: Date;
   readonly detail: string;
   readonly periodType: 'life' | 'year' | 'month' | 'week' | 'day';
-  readonly categoryId: string | number;
+  readonly categoryId: number;
 };

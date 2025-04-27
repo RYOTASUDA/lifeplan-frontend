@@ -37,7 +37,10 @@ import { PlanRequest } from 'types/PlanRequest';
 import { PlanResponse } from 'types/PlanResponse';
 
 export const PlansContainer = (): ReactElement => {
-  const { allPlans, setSearchParams } = usePlans();
+  const [searchParams, setSearchParams] = useState<{ categoryId?: number }>({
+    categoryId: undefined,
+  });
+  const { allPlans } = usePlans(searchParams);
   const { categories } = useCategories();
   const { createPlan } = useCreatePlan();
   const { updatePlan } = useUpdatePlan();
@@ -54,7 +57,7 @@ export const PlansContainer = (): ReactElement => {
       deadline: new Date(),
       detail: '',
       periodType: 'life',
-      categoryId: `${categories[0]?.id}`,
+      categoryId: categories[0]?.id,
     },
   });
 
@@ -63,6 +66,7 @@ export const PlansContainer = (): ReactElement => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
   const [planToDelete, setPlanToDelete] = useState<PlanResponse>(undefined);
+  const [categoryId, setCategoryId] = useState<number>(undefined);
 
   const formatDate = (date: string): string => {
     const dateObj = new Date(date);
@@ -80,14 +84,14 @@ export const PlansContainer = (): ReactElement => {
             deadline: new Date(plan.deadline),
             detail: plan.detail,
             periodType: plan.periodType,
-            categoryId: `${plan.category.id}`,
+            categoryId: plan.category.id,
           }
         : {
             title: '',
             deadline: new Date(),
             detail: '',
             periodType: 'life',
-            categoryId: `${categories[0]?.id}`,
+            categoryId: categories[0]?.id,
           }
     );
     setModalMode(mode);
@@ -96,10 +100,9 @@ export const PlansContainer = (): ReactElement => {
 
   const closeModal = (): void => setIsModalOpen(false);
 
-  const handleSearch = (e: string): void => {
-    const categoryId = e === '' ? undefined : e;
-
-    setSearchParams({ categoryId });
+  const handleSearch = (eventCategoryId: string): void => {
+    setCategoryId(Number(eventCategoryId));
+    setSearchParams({ categoryId: Number(eventCategoryId) });
   };
 
   const onSubmit: SubmitHandler<PlanRequest> = (data) => {
@@ -108,6 +111,7 @@ export const PlansContainer = (): ReactElement => {
     } else if (modalMode === 'edit') {
       updatePlan(data);
     }
+    setSearchParams({ categoryId });
     closeModal();
   };
 
@@ -145,7 +149,9 @@ export const PlansContainer = (): ReactElement => {
           </Box>
 
           <Autocomplete
-            onChange={(e): void => handleSearch(e)}
+            onChange={(e): void => {
+              handleSearch(e);
+            }}
             placeholder="カテゴリーで絞り込む"
             py={4}
           >
