@@ -1,5 +1,5 @@
 import { mutate } from 'swr';
-import { PlanRequest } from 'types/PlanRequest';
+import { PlanForm, PlanRequest } from 'types/PlanRequest';
 
 async function fetcher(url: string, plan: PlanRequest) {
   return fetch(url, {
@@ -13,7 +13,7 @@ async function fetcher(url: string, plan: PlanRequest) {
 }
 
 export const useCreatePlan = () => {
-  const createPlan = async (plan: PlanRequest) => {
+  const createPlan = async (plan: PlanForm) => {
     const planParams = { ...plan, categoryId: Number(plan.categoryId) };
     await fetcher(`${process.env.BACKEND_DOMAIN}/api/plans`, planParams);
     mutate(`${process.env.BACKEND_DOMAIN}/api/plans`);

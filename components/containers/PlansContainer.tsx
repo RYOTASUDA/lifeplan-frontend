@@ -33,7 +33,7 @@ import { useCreatePlan } from 'hooks/usePlanCreate';
 import { useDeletePlan } from 'hooks/usePlanDelete';
 import { useUpdatePlan } from 'hooks/usePlanUpdate';
 import { usePlans } from 'hooks/usePlans';
-import { PlanRequest } from 'types/PlanRequest';
+import { PlanForm } from 'types/PlanRequest';
 import { PlanResponse } from 'types/PlanResponse';
 
 export const PlansContainer = (): ReactElement => {
@@ -51,13 +51,14 @@ export const PlansContainer = (): ReactElement => {
     control,
     formState: { errors },
     reset,
-  } = useForm<PlanRequest>({
+  } = useForm<PlanForm>({
     defaultValues: {
+      id: undefined,
       title: '',
       deadline: new Date(),
       detail: '',
       periodType: 'life',
-      categoryId: categories[0]?.id,
+      categoryId: `${categories[0]?.id}`,
     },
   });
 
@@ -84,14 +85,15 @@ export const PlansContainer = (): ReactElement => {
             deadline: new Date(plan.deadline),
             detail: plan.detail,
             periodType: plan.periodType,
-            categoryId: plan.category.id,
+            categoryId: `${plan.category.id}`,
           }
         : {
+            id: undefined,
             title: '',
             deadline: new Date(),
             detail: '',
             periodType: 'life',
-            categoryId: categories[0]?.id,
+            categoryId: `${categories[0]?.id}`,
           }
     );
     setModalMode(mode);
@@ -105,7 +107,7 @@ export const PlansContainer = (): ReactElement => {
     setSearchParams({ categoryId: Number(eventCategoryId) });
   };
 
-  const onSubmit: SubmitHandler<PlanRequest> = (data) => {
+  const onSubmit: SubmitHandler<PlanForm> = (data) => {
     if (modalMode === 'create') {
       createPlan(data);
     } else if (modalMode === 'edit') {
