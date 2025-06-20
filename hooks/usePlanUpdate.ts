@@ -13,10 +13,10 @@ async function fetcher(url: string, plan: PlanRequest) {
 }
 
 export const useUpdatePlan = () => {
-  const updatePlan = (plan: PlanForm) => {
+  const updatePlan = async (plan: PlanForm) => {
     const planParams = { ...plan, categoryId: Number(plan.categoryId) };
-    fetcher(`${process.env.BACKEND_DOMAIN}/api/plans/${plan.id}`, planParams);
-    mutate(`${process.env.BACKEND_DOMAIN}/api/plans`);
+    await fetcher(`${process.env.BACKEND_DOMAIN}/api/plans/${plan.id}`, planParams);
+    await mutate(`${process.env.BACKEND_DOMAIN}/api/plans`);
   };
 
   return { updatePlan };

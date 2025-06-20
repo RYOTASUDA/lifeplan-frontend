@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   Dialog,
-  Divider,
   Flex,
   FormControl,
   Heading,
@@ -107,11 +106,11 @@ export const PlansContainer = (): ReactElement => {
     setSearchParams({ categoryId: Number(eventCategoryId) });
   };
 
-  const onSubmit: SubmitHandler<PlanForm> = (data) => {
+  const onSubmit: SubmitHandler<PlanForm> = async (data) => {
     if (modalMode === 'create') {
-      createPlan(data);
+      await createPlan(data);
     } else if (modalMode === 'edit') {
-      updatePlan(data);
+      await updatePlan(data);
     }
     setSearchParams({ categoryId });
     closeModal();
@@ -127,8 +126,9 @@ export const PlansContainer = (): ReactElement => {
     setIsDialogOpen(false);
   };
 
-  const successDeletePlan = (plan: PlanResponse): void => {
-    deletePlan(plan.id);
+  const successDeletePlan = async (plan: PlanResponse): Promise<void> => {
+    await deletePlan(plan.id);
+    setSearchParams({ categoryId });
     closeDeleteDialog();
   };
 
@@ -172,7 +172,6 @@ export const PlansContainer = (): ReactElement => {
                   <Text fontSize="xl" fontWeight="bold" mr="4">
                     {planGroup.era}年代
                   </Text>
-                  <Divider flex="1" />
                 </Flex>
                 <Flex direction={{ base: 'row', lg: 'column' }} gap={4} wrap="wrap">
                   {planGroup.plans.map((plan) => (
@@ -325,7 +324,7 @@ export const PlansContainer = (): ReactElement => {
         isOpen={isDialogOpen}
         onCancel={closeDeleteDialog}
         onClose={closeDeleteDialog}
-        onSuccess={(): void => successDeletePlan(planToDelete)}
+        onSuccess={(): Promise<void> => successDeletePlan(planToDelete)}
         success={{
           variant: 'outline',
           colorScheme: 'red',
